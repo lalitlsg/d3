@@ -2,5 +2,6 @@
     {"name": "Noodles", "quantity": 300},
     {"name": "Paneer", "quantity": 900},
     {"name": "Ice Creams", "quantity": 100},
-    {"name": "Rice", "quantity": 600}
+    {"name": "Rice", "quantity": 600},
+    {"name": "Burger", "quantity": 1300}
 ]
