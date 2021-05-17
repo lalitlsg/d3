@@ -1,0 +1,6 @@
+[
+    {"radius":50, "distance":50, "color":"blue"},
+    {"radius":60, "distance":170, "color":"purple"},
+    {"radius":40, "distance":280, "color":"orange"},
+    {"radius":70, "distance":450, "color":"pink"}
+]
