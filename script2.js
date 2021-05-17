@@ -1,5 +1,6 @@
+// d3 taking data from json file
+
 const svg = d3.select('svg');
-console.log(svg);
 
 d3.json('circles.json').then(data=>{
     

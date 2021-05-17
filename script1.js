@@ -1,3 +1,5 @@
+// d3 enter selection 
+
 const data = [
     {width: 200, height: 100, fill: 'blue'},
     {width: 100, height: 70, fill: 'pink'},
