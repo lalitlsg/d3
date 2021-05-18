@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      main {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+      .canvas {
+        margin-top: 5em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <form id="form">
+          <input type="text" placeholder="name" id="name" required />
+          <input type="text" placeholder="cost" id="cost" required />
+          <button type="submit">submit</button>
+        </form>
+      </section>
+      <div class="canvas"></div>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script>
+      var firebaseConfig = {
+        authDomain: "d3-practice-94991.firebaseapp.com",
+        projectId: "d3-practice-94991",
+        storageBucket: "d3-practice-94991.appspot.com",
+        messagingSenderId: "255359116179",
+        appId: "1:255359116179:web:82635f127e4b3ec6563e66",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="script.js"></script>
+    <script src="graph.js"></script>
+  </body>
+</html>
