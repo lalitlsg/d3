@@ -26,7 +26,7 @@ d3.json('orders.json').then(data=>{
     // linear scale
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d=>d.quantity)])
-        .range([0,graphHeight]);
+        .range([graphHeight, 0]);
 
     // band scale
     const x = d3.scaleBand()
@@ -47,16 +47,18 @@ d3.json('orders.json').then(data=>{
 
     // add attr to dom rect
     rect.attr('width', x.bandwidth)
-        .attr('height',d=>y(d.quantity))
+        .attr('height',d=>graphHeight- y(d.quantity))
         .attr('x', d=>x(d.name))
+        .attr('y', d=>y(d.quantity))
         .attr('fill', 'blue');
 
     // append enter selection to dom
     rect.enter()
         .append('rect')
         .attr('width', x.bandwidth)
-        .attr('height',d=>y(d.quantity))
+        .attr('height',d=>graphHeight - y(d.quantity))
         .attr('x', d=>x(d.name))
+        .attr('y', d=>y(d.quantity))
         .attr('fill', 'blue');
 
     // create and call the axis
