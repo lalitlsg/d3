@@ -14,6 +14,13 @@
       .canvas {
         margin-top: 5em;
       }
+
+      .my {
+        background-color: #e5e5ff;
+        padding: 5px;
+        border-radius: 3px;
+        color: #000080;
+      }
     </style>
   </head>
   <body>
@@ -30,11 +37,25 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
     <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyBzaxycZENBTYod1aDxnMdP78tnc_Kqfjk",
+        authDomain: "d3-practice-94991.firebaseapp.com",
+        projectId: "d3-practice-94991",
+        storageBucket: "d3-practice-94991.appspot.com",
+        messagingSenderId: "255359116179",
+        appId: "1:255359116179:web:82635f127e4b3ec6563e66",
+      };
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
     </script>
     <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    <script src="https://unpkg.com/d3-v6-tip@1.0.6/build/d3-v6-tip.js"></script>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/bumbeishvili/d3-tip-for-v6@4/d3-tip.min.css"
+    /> -->
     <script src="script.js"></script>
     <script src="graph.js"></script>
   </body>

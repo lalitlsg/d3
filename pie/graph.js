@@ -26,8 +26,33 @@ const arcPath = d3
 // ordinal scale for colors
 const colors = d3.scaleOrdinal(d3["schemeSet3"]);
 
+// legend setup
+const legendGroup = svg
+  .append("g")
+  .attr("transform", `translate(${dim.width + 40}, 10)`);
+
+const legend = d3.legendColor().shape("circle").shapePadding(10).scale(colors);
+
+// tooltip
+const tip = d3
+  .tip()
+  .attr("class", "d3-tip my")
+  .html(
+    (e, d) => `<span>${d.data.name}</span>, 
+  <span>${d.data.cost}</span>
+  <div>click to delete</div>
+  `
+  );
+
+graph.call(tip);
+
 const update = (data) => {
   colors.domain(data.map((d) => d.name));
+
+  // update and call legend
+  legendGroup.call(legend);
+  legendGroup.selectAll("text").attr("fill", "grey");
+
   const paths = graph.selectAll("path").data(pie(data));
   paths
     .exit()
@@ -35,7 +60,11 @@ const update = (data) => {
     .duration(1000)
     .attrTween("d", arcTweenExit)
     .remove();
-  paths.attr("d", arcPath);
+  paths
+    .attr("d", arcPath)
+    .transition()
+    .duration(1000)
+    .attrTween("d", arcTweenUpdate);
   paths
     .enter()
     .append("path")
@@ -43,9 +72,23 @@ const update = (data) => {
     .attr("stroke", "#fff")
     .attr("stroke-width", 3)
     .attr("fill", (d) => colors(d.data.name))
+    .each(function (d) {
+      this._current = d;
+    })
     .transition()
     .duration(1000)
     .attrTween("d", arcTweenEnter);
+
+  console.log(graph.selectAll("path"));
+  graph.selectAll("path").on("mouseover", (e, d) => {
+    tip.show(e, d);
+    mouseOverHandler(e, d);
+  });
+  graph.selectAll("path").on("mouseout", (e, d) => {
+    tip.hide(e, d);
+    mouseOutHandler(e, d);
+  });
+  graph.selectAll("path").on("click", deleteHandler);
 };
 
 let data = [];
@@ -87,4 +130,24 @@ const arcTweenExit = (d) => {
     d.startAngle = i(t);
     return arcPath(d);
   };
+};
+
+function arcTweenUpdate(d) {
+  const i = d3.interpolate(this._current, d);
+  this._current = i(1);
+  return function (t) {
+    return arcPath(i(t));
+  };
+}
+
+const mouseOverHandler = (e, d) => {
+  d3.select(e.currentTarget).attr("fill", "grey");
+};
+
+const mouseOutHandler = (e, d) => {
+  d3.select(e.currentTarget).attr("fill", colors(d.data.name));
+};
+
+const deleteHandler = (e, d) => {
+  db.collection("expences").doc(d.data.id).delete();
 };
