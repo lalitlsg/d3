@@ -65,20 +65,27 @@ const update = (data) => {
   // add attr to dom rect
   rect
     .attr("width", x.bandwidth)
-    .attr("height", (d) => graphHeight - y(d.quantity))
     .attr("x", (d) => x(d.name))
-    .attr("y", (d) => y(d.quantity))
     .attr("fill", "blue");
+  // .transition()
+  // .duration(1000)
+  // .attr("height", (d) => graphHeight - y(d.quantity))
+  // .attr("y", (d) => y(d.quantity));
 
   // append enter selection to dom
   rect
     .enter()
     .append("rect")
-    .attr("width", x.bandwidth)
-    .attr("height", (d) => graphHeight - y(d.quantity))
+    .attr("height", 0)
+    .attr("fill", "blue")
     .attr("x", (d) => x(d.name))
+    .attr("y", graphHeight)
+    .merge(rect)
+    .transition()
+    .duration(1000)
+    .attrTween("width", widhtTween)
     .attr("y", (d) => y(d.quantity))
-    .attr("fill", "blue");
+    .attr("height", (d) => graphHeight - y(d.quantity));
 
   // call axes
   xAxisGroup.call(xAxis);
@@ -133,10 +140,16 @@ db.collection("dishes").onSnapshot((res) => {
       default:
         break;
     }
-
-    update(data);
   });
+  update(data);
 });
+
+// Tweens
+
+const widhtTween = (d) => {
+  const i = d3.interpolate(0, x.bandwidth());
+  return (t) => i(t);
+};
 
 // d3 min, max, extent methods
 // const min = d3.min(data, d=>d.quantity);
