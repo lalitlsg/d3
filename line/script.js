@@ -26,10 +26,32 @@ const xAxisGroup = graph
 
 const yAxisGroup = graph.append("g").attr("class", "y-axis");
 
+// d3 line path generator
+const line = d3
+  .line()
+  .x((d) => x(new Date(d.date)))
+  .y((d) => y(d.distance));
+
+// line path element
+const path = graph.append("path");
+
+// line group
+const lines = graph.append("g").style("opacity", 0);
+const xLine = lines.append("line").attr("stroke", "blue");
+const yLine = lines.append("line").attr("stroke", "blue");
+
 const update = (data) => {
+  // filter data
+  data = data.filter((item) => item.activity === "cycling");
+
+  // sort data based on date
+  data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
   // set scale domains
   x.domain(d3.extent(data, (d) => new Date(d.date)));
   y.domain([0, d3.max(data, (d) => d.distance)]);
+
+  path.data([data]).attr("fill", "none").attr("stroke", "blue").attr("d", line);
 
   // join data
   const circles = graph.selectAll("cirles").data(data);
@@ -50,6 +72,26 @@ const update = (data) => {
     .attr("cx", (d) => x(new Date(d.date)))
     .attr("cy", (d) => y(d.distance))
     .attr("fill", "blue");
+
+  // events
+  graph.selectAll("circle").on("mouseover", (e, d) => {
+    d3.select(e.currentTarget).attr("r", 8);
+    xLine
+      .attr("x1", x(new Date(d.date)))
+      .attr("x2", x(new Date(d.date)))
+      .attr("y1", graphHeight)
+      .attr("y2", y(d.distance));
+    yLine
+      .attr("x1", 0)
+      .attr("x2", x(new Date(d.date)))
+      .attr("y1", y(d.distance))
+      .attr("y2", y(d.distance));
+    lines.style("opacity", 1);
+  });
+  graph.selectAll("circle").on("mouseout", (e, d) => {
+    d3.select(e.currentTarget).attr("r", 4);
+    lines.style("opacity", 0);
+  });
 
   // create axes
   const xAxis = d3.axisBottom(x).ticks(4).tickFormat(d3.timeFormat("%b %d"));
@@ -80,9 +122,24 @@ const data = [
     distance: 50,
   },
   {
-    activity: "swimming",
-    date: new Date("2021-05-19").toString(),
+    activity: "cycling",
+    date: new Date("2021-05-16").toString(),
     distance: 100,
+  },
+  {
+    activity: "walking",
+    date: new Date("2021-05-15").toString(),
+    distance: 50,
+  },
+  {
+    activity: "cycling",
+    date: new Date("2021-05-14").toString(),
+    distance: 0,
+  },
+  {
+    activity: "cycling",
+    date: new Date("2021-05-18").toString(),
+    distance: 150,
   },
 ];
 
